@@ -1,0 +1,51 @@
+package hr.spring.web.trisek.model;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Entity
+public class Item {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(length = 25)
+    private String name;
+
+    @Column(length = 100)
+    private String description;
+
+    @Column(length = 6)
+    private Integer quantity;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Category Category;
+
+    public Item(String name, String description, Integer quantity, Category Category) {
+        this.name = name;
+        this.description = description;
+        this.quantity = quantity;
+        this.Category = Category;
+    }
+
+    public Item(Integer id, String name, String description, Integer quantity) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.quantity = quantity;
+    }
+    public Item(String name, String description, Integer quantity) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.quantity = quantity;
+    }
+
+}

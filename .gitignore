@@ -1,0 +1,91 @@
+# Build output
+/target/
+build/
+out/
+bin/
+
+# Maven
+!.mvn/wrapper/maven-wrapper.jar
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Gradle
+.gradle/
+*/.gradle
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+.nbbuild/
+.nbproject/private/
+dist/
+.nbdist/
+.nb-gradle/
+.sts4-cache/
+.apt_generated/
+.factorypath
+.springBeans
+
+# Logs and temp files
+logs/
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# OS-specific
+.DS_Store
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Package files
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+# Miscellaneous
+*.orig
+*.pydevproject
+*.buildpath
+.cache-main
+.scala_dependencies
+.worksheet
+.externalToolBuilders/
+*.launch
+*.ctxt
+.mtj.tmp/
+.recommenders/
+.tern-project
+.texlipse
+.sublime-*
+/scratch
+README.html
+.exercism
+
+# Application properties (if containing secrets)
+# Uncomment the next line if you want to ignore your local properties
+# src/main/resources/application.properties
+
+# Node modules (if using frontend assets)
+# node_modules/
