@@ -19,7 +19,6 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
 
-
     @Override
     public List<ItemDTO> getAll() {
         return itemRepository.getAll().stream().map(this::toDto).collect(Collectors.toList());
@@ -33,7 +32,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Optional<ItemDTO> getById(long id) { return itemRepository.getById((int) id).map(this::toDto);    }
+    public Optional<ItemDTO> getById(long id) {
+        return itemRepository.getById((int) id).map(this::toDto);
+    }
 
     @Override
     public boolean delete(long id) {
@@ -50,11 +51,11 @@ public class ItemServiceImpl implements ItemService {
                 item.getName(),
                 item.getDescription(),
                 item.getQuantity(),
+                item.getPrice(),
                 categoryId,
                 categoryName
         );
     }
-
 
     private Item toItem(ItemDTO dto) {
         Category category = categoryRepository.getById(dto.getCategoryId())
@@ -65,6 +66,7 @@ public class ItemServiceImpl implements ItemService {
                 dto.getName(),
                 dto.getDescription(),
                 dto.getQuantity(),
+                dto.getPrice(),
                 category
         );
     }

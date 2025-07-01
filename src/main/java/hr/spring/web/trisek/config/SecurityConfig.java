@@ -14,6 +14,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    public static final String ROLE_USER = "USER";
+    public static final String ROLE_ADMIN = "ADMIN";
+
     private final CustomUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
@@ -29,8 +32,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/css/**", "/js/**").permitAll()
-                        .requestMatchers("/items", "/cart/**").hasAnyRole("user", "admin")
-                        .requestMatchers("/admin/**").hasRole("admin")
+                        .requestMatchers("/items", "/cart/**").permitAll()
+                        .requestMatchers("/cart/checkout").hasAnyRole(ROLE_USER,ROLE_ADMIN)
+                        .requestMatchers("/admin/**").hasRole(ROLE_ADMIN)
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -46,4 +50,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }

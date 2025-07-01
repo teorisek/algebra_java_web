@@ -42,18 +42,51 @@
         tr:hover {
             background: #e2eafc;
         }
+        .add-btn {
+            display: inline-block;
+            background: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 20px;
+            line-height: 28px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .add-btn:hover {
+            background: #218838;
+        }
+        .cart-link {
+            float: right;
+            margin-bottom: 16px;
+            background: #007bff;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .cart-link:hover {
+            background: #0056b3;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <h2>Items Inventory</h2>
+    <a class="cart-link" href="/cart/view">View Cart</a>
     <table>
         <thead>
         <tr>
             <th>Name</th>
             <th>Description</th>
             <th>Quantity</th>
+            <th>Price</th>
             <th>Category</th>
+            <th>Add</th>
         </tr>
         </thead>
         <tbody>
@@ -61,7 +94,15 @@
             <td th:text="${item.name}">Item Name</td>
             <td th:text="${item.description}">Description</td>
             <td th:text="${item.quantity}">Quantity</td>
+            <td th:text="${#numbers.formatDecimal(item.price, 1, 'DEFAULT', 2, 'DEFAULT')} + ' €'">0,00 €</td>
             <td th:text="${item.categoryName}">Category</td>
+            <td>
+                <form th:action="@{/cart/add}" method="post" style="display:inline;">
+                    <input type="hidden" name="itemId" th:value="${item.id}" />
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit" class="add-btn" title="Add to cart">+</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

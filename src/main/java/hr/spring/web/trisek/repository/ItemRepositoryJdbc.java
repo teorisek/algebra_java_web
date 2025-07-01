@@ -68,6 +68,7 @@ public class ItemRepositoryJdbc implements ItemRepository {
             item.setName(rs.getString("name"));
             item.setDescription(rs.getString("description"));
             item.setQuantity(rs.getInt("quantity"));
+            item.setPrice(rs.getBigDecimal("price"));
 
             int categoryId = rs.getInt("category_id");
             Category category = categoryRepository.getById(categoryId).orElse(null);
