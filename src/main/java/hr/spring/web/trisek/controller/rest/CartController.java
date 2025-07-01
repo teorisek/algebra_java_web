@@ -1,7 +1,10 @@
 package hr.spring.web.trisek.controller.rest;
 
 import hr.spring.web.trisek.model.Cart;
+import hr.spring.web.trisek.model.Item;
+import hr.spring.web.trisek.model.Order;
 import hr.spring.web.trisek.service.ItemService;
+import hr.spring.web.trisek.service.OrderService;
 import hr.spring.web.trisek.dto.ItemDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -9,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import hr.spring.web.trisek.model.Checkout;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Controller
@@ -18,6 +22,8 @@ public class CartController {
 
     private final Cart cart;
     private final ItemService itemService;
+    private final OrderService orderService;
+
 
     @PostMapping("/add")
     public String addToCart(@RequestParam int itemId, @RequestParam(defaultValue = "1") int quantity) {
@@ -55,44 +61,47 @@ public class CartController {
         return "redirect:/cart/view";
     }
 
-//    @GetMapping("/checkout")
-//    public String checkoutForm(Model model) {
-//        double total = calculateTotal(cart.getItems());
-//        Checkout checkout = new Checkout();
-//        checkout.setAmount(total);
-//        model.addAttribute("checkout", checkout);
-//        return "checkout-form";
-//    }
-//
-//    @PostMapping("/checkout")
-//    public String processCheckout(@ModelAttribute Checkout checkout, Model model) {
-//        checkout.setPaymentStatus("PENDING");
-//        Checkout saved = checkoutService.save(checkout);
-//        cart.clear();
-//
-//        if ("PAYPAL".equalsIgnoreCase(saved.getPaymentMethod())) {
-//            return "redirect:/checkout/paypal?amount=" + saved.getAmount() + "&id=" + saved.getId();
-//        } else {
-//            model.addAttribute("message", "Order placed! Please pay in person.");
-//            return "checkout-success";
-//        }
-//    }
-//
-//    private double calculateTotal(Map<Integer, Integer> cartItems) {
-//        double total = 0.0;
-//        for (Map.Entry<Integer, Integer> entry : cartItems.entrySet()) {
-//            int itemId = entry.getKey();
-//            int quantity = entry.getValue();
-//            Optional<Item> itemOpt = itemService.getById((long) itemId);
-//            if (itemOpt.isPresent()) {
-//                total += itemOpt.get().getPrice() * quantity;
-//            }
-//        }
-//        return total;
-//    }
-
     @GetMapping("/checkout")
-    public String checkoutRedirect() {
-        return "redirect:/checkout";
+    public String showCheckoutForm(Model model) {
+        BigDecimal total = calculateCartTotal(cart.getItems());
+        Checkout checkout = new Checkout();
+        checkout.setAmount(total);
+        model.addAttribute("checkout", checkout);
+        return "checkout-form";
+    }
+
+    @PostMapping("/checkout")
+    public String processCheckout(@ModelAttribute Checkout checkout) {
+        Order order = new Order(
+                checkout.getCustomerName(),
+                checkout.getEmail(),
+                checkout.getAddress(),
+                checkout.getAmount(),
+                checkout.getPaymentMethod(),
+                "PENDING"
+        );
+
+        orderService.save(order);
+
+        if ("PAYPAL".equals(checkout.getPaymentMethod())) {
+            return "redirect:/paypal?orderId=" + order.getId();
+        }
+        return "checkout-success";
+    }
+
+    private BigDecimal calculateCartTotal(Map<Integer, Integer> cartItems) {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Map.Entry<Integer, Integer> entry : cartItems.entrySet()) {
+            int itemId = entry.getKey();
+            int quantity = entry.getValue();
+            Optional<ItemDTO> itemOpt = itemService.getById((long) itemId); // Use ItemDTO here
+            if (itemOpt.isPresent()) {
+                BigDecimal price = itemOpt.get().getPrice();
+                if (price != null) {
+                    total = total.add(price.multiply(BigDecimal.valueOf(quantity)));
+                }
+            }
+        }
+        return total;
     }
 }

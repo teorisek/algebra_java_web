@@ -36,7 +36,7 @@ public class Order {
     @Column(name = "payment_status", length = 20, nullable = false)
     private String paymentStatus;
 
-    @Column(name = "order_date", columnDefinition = "TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "order_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime orderDate;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Success</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .success-container {
+            max-width: 480px;
+            margin: 80px auto;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.09);
+            border-radius: 12px;
+            padding: 40px 32px 32px 32px;
+            text-align: center;
+        }
+        h2 {
+            color: #28a745;
+            margin-bottom: 18px;
+        }
+        p {
+            color: #333;
+            font-size: 1.1em;
+            margin-bottom: 28px;
+        }
+        .back-link {
+            display: inline-block;
+            background: #007bff;
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .back-link:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="success-container">
+    <h2>Thank you for your order!</h2>
+    <p>Your order has been placed successfully.<br>
+        Please pay in person when you pick up your items.</p>
+    <a class="back-link" href="/items">Back to Shop</a>
+</div>
+</body>
+</html>
