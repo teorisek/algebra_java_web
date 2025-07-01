@@ -1,4 +1,4 @@
-package hr.spring.web.trisek.controller;
+package hr.spring.web.trisek.controller.rest;
 
 import hr.spring.web.trisek.dto.ItemDTO;
 import hr.spring.web.trisek.service.ItemService;
@@ -22,5 +22,10 @@ public class FrontendController {
         List<ItemDTO> items = itemService.getAll();
         model.addAttribute("items", items);
         return "items";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 }
