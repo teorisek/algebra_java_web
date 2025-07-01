@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Items List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            border-radius: 8px;
+            padding: 32px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 32px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+        }
+        th {
+            background: #007bff;
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #f2f6fc;
+        }
+        tr:hover {
+            background: #e2eafc;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Items Inventory</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Category</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${items}">
+            <td th:text="${item.name}">Item Name</td>
+            <td th:text="${item.description}">Description</td>
+            <td th:text="${item.quantity}">Quantity</td>
+            <td th:text="${item.categoryName}">Category</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

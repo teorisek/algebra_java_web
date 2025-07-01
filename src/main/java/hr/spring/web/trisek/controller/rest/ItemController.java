@@ -1,7 +1,7 @@
 package hr.spring.web.trisek.controller.rest;
 
-import hr.spring.web.trisek.dto.CategoryDTO;
-import hr.spring.web.trisek.service.CategoryService;
+import hr.spring.web.trisek.dto.ItemDTO;
+import hr.spring.web.trisek.service.ItemService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,27 +11,27 @@ import java.util.Optional;
 @RequestMapping("/rest/item")
 public class ItemController {
 
-    private final CategoryService categoryService;
+    private final ItemService itemService;
 
-    public ItemController(CategoryService categoryService) {
-        this.categoryService = categoryService;
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
     }
 
     @GetMapping("/")
-    public List<CategoryDTO> getAll() {
-    return categoryService.getAll();
+    public List<ItemDTO> getAll() {
+    return itemService.getAll();
     }
 
     @PostMapping("/")
-    public CategoryDTO save(@RequestBody CategoryDTO category) {
-    return categoryService.save(category);
+    public ItemDTO save(@RequestBody ItemDTO item) {
+    return itemService.save(item);
     }
 
     @GetMapping("/{id}")
-    public Optional<CategoryDTO> getById(@PathVariable int id) {
-        return categoryService.getById(id);
+    public Optional<ItemDTO> getById(@PathVariable int id) {
+        return itemService.getById(id);
     }
 
     @DeleteMapping("/")
-    public boolean delete(@RequestBody long id) { return categoryService.delete(id);}
+    public boolean delete(@RequestBody long id) { return itemService.delete(id);}
 }
