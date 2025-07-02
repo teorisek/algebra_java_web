@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Details</title>
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 700px;
+            margin: 60px auto;
+            background: #fff;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            padding: 38px 34px 28px 34px;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 18px;
+        }
+        .order-info {
+            margin-bottom: 26px;
+            font-size: 1.1em;
+        }
+        .order-info span {
+            display: inline-block;
+            min-width: 120px;
+            color: #555;
+        }
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            background: #fff;
+        }
+        .details-table th, .details-table td {
+            padding: 12px 10px;
+            text-align: left;
+        }
+        .details-table th {
+            background: #007bff;
+            color: #fff;
+            font-weight: 600;
+        }
+        .details-table tr:nth-child(even) {
+            background: #f2f6fc;
+        }
+        .details-table tr:hover {
+            background: #e2eafc;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            background: #6c757d;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .back-link:hover {
+            background: #343a40;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container">
+    <h2>Order #<span th:text="${order.id}"></span> Details</h2>
+    <div class="order-info">
+        <div><span>Date:</span> <span th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></span></div>
+        <div><span>Amount:</span> <span th:text="${order.amount}"></span> €</div>
+        <div><span>Status:</span> <span th:text="${order.paymentStatus}"></span></div>
+        <div><span>Payment:</span> <span th:text="${order.paymentMethod}"></span></div>
+    </div>
+    <table class="details-table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${itemDetails}">
+            <td th:text="${item.name}">Item Name</td>
+            <td th:text="${item.description}">Description</td>
+            <td th:text="${item.quantity}">1</td>
+            <td th:text="${item.price} + ' €'">0.00 €</td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/orders/history" class="back-link">&larr; Back to Order History</a>
+</div>
+</body>
+</html>

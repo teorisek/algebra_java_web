@@ -1,0 +1,27 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    background: #343a40;
+    color: #fff;
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-sizing: border-box;
+}
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 18px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+.navbar a:hover {
+    color: #ffc107;
+}
+.navbar span {
+    margin-right: 14px;
+}

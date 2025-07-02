@@ -42,6 +42,9 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<OrderItem> items;
 
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
+
     public Order(String customerName, String email, String address, BigDecimal amount, String paymentMethod, String paymentStatus) {
         this.customerName = customerName;
         this.email = email;

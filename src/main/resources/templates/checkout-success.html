@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Order Success</title>
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -43,6 +44,7 @@
     </style>
 </head>
 <body>
+<div th:replace="fragments/navbar :: navbar"></div>
 <div class="success-container">
     <h2>Thank you for your order!</h2>
     <p>Your order has been placed successfully.<br>

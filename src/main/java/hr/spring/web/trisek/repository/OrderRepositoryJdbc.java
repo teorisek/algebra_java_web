@@ -1,6 +1,7 @@
 package hr.spring.web.trisek.repository;
 
 import hr.spring.web.trisek.model.Order;
+import hr.spring.web.trisek.model.OrderItem;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.ZoneOffset;
 import java.util.*;
 
 @Repository
@@ -37,8 +40,20 @@ public class OrderRepositoryJdbc implements OrderRepository {
         params.put("amount", order.getAmount());
         params.put("payment_method", order.getPaymentMethod());
         params.put("payment_status", order.getPaymentStatus());
+        params.put("user_id", order.getUserId());
+        params.put("order_date", Timestamp.valueOf(order.getOrderDate().toLocalDateTime()));
         Number generatedPrimaryKey = simpleJdbcInsert.executeAndReturnKey(params);
         order.setId(generatedPrimaryKey.intValue());
+
+        if (order.getItems() != null) {
+            for (OrderItem item : order.getItems()) {
+                jdbcTemplate.update(
+                        "INSERT INTO order_item (order_id, item_id, quantity, price) VALUES (?, ?, ?, ?)",
+                        order.getId(), item.getItemId(), item.getQuantity(), item.getPrice()
+                );
+            }
+        }
+
         return order;
     }
 
@@ -65,7 +80,34 @@ public class OrderRepositoryJdbc implements OrderRepository {
             order.setAmount(rs.getBigDecimal("amount"));
             order.setPaymentMethod(rs.getString("payment_method"));
             order.setPaymentStatus(rs.getString("payment_status"));
+            order.setUserId(rs.getInt("user_id"));
+            order.setOrderDate(rs.getTimestamp("order_date").toLocalDateTime().atOffset(ZoneOffset.UTC));
             return order;
         }
+    }
+
+    @Override
+    public List<Order> findByUserId(Integer userId) {
+        return jdbcTemplate.query(
+                "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC",
+                new OrderRowMapper(),
+                userId
+        );
+    }
+
+    @Override
+    public List<OrderItem> findItemsByOrderId(Integer orderId) {
+        return jdbcTemplate.query(
+                "SELECT * FROM order_item WHERE order_id = ?",
+                (rs, rowNum) -> {
+                    OrderItem item = new OrderItem();
+                    item.setId(rs.getInt("id"));
+                    item.setItemId(rs.getInt("item_id"));
+                    item.setQuantity(rs.getInt("quantity"));
+                    item.setPrice(rs.getBigDecimal("price"));
+                    return item;
+                },
+                orderId
+        );
     }
 }

@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Checkout</title>
+  <link rel="stylesheet" th:href="@{/css/navbar.css}">
   <style>
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -70,9 +71,10 @@
   </style>
 </head>
 <body>
+<link rel="stylesheet" th:href="@{/css/navbar.css}">
 <div class="checkout-container">
   <h2>Checkout</h2>
-  <form th:action="@{/cart/checkout}" th:object="${checkout}" method="post">
+  <form th:action="@{/cart/checkout}" th:object="${checkoutForm}" method="post">
     <div class="form-group">
       <label for="customerName">Name:</label>
       <input type="text" th:field="*{customerName}" id="customerName" required />

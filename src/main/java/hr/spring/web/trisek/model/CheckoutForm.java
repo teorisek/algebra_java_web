@@ -1,14 +1,13 @@
 package hr.spring.web.trisek.model;
+import lombok.Getter;
+import lombok.Setter;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Checkout {
+
+@Getter
+@Setter
+public class CheckoutForm {
     private Integer id;
     private String customerName;
     private String email;

@@ -1,18 +1,23 @@
 package hr.spring.web.trisek.controller.rest;
 
 import hr.spring.web.trisek.model.Cart;
-import hr.spring.web.trisek.model.Item;
+import hr.spring.web.trisek.model.CheckoutForm;
 import hr.spring.web.trisek.model.Order;
+import hr.spring.web.trisek.model.OrderItem;
 import hr.spring.web.trisek.service.ItemService;
 import hr.spring.web.trisek.service.OrderService;
+import hr.spring.web.trisek.service.UserService;
+import hr.spring.web.trisek.model.User;
 import hr.spring.web.trisek.dto.ItemDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import hr.spring.web.trisek.model.Checkout;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 @Controller
@@ -23,7 +28,7 @@ public class CartController {
     private final Cart cart;
     private final ItemService itemService;
     private final OrderService orderService;
-
+    private final UserService userService;
 
     @PostMapping("/add")
     public String addToCart(@RequestParam int itemId, @RequestParam(defaultValue = "1") int quantity) {
@@ -64,26 +69,52 @@ public class CartController {
     @GetMapping("/checkout")
     public String showCheckoutForm(Model model) {
         BigDecimal total = calculateCartTotal(cart.getItems());
-        Checkout checkout = new Checkout();
-        checkout.setAmount(total);
-        model.addAttribute("checkout", checkout);
+        CheckoutForm checkoutForm = new CheckoutForm();
+        checkoutForm.setAmount(total);
+        model.addAttribute("checkoutForm", checkoutForm);
         return "checkout-form";
     }
 
     @PostMapping("/checkout")
-    public String processCheckout(@ModelAttribute Checkout checkout) {
+    public String processCheckout(@ModelAttribute CheckoutForm checkoutForm) {
+        BigDecimal total = calculateCartTotal(cart.getItems());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        Optional<User> userOpt = userService.findByUsername(username);
+        if (userOpt.isEmpty()) {
+            return "redirect:/login";
+        }
+        Integer userId = userOpt.get().getId();
+
         Order order = new Order(
-                checkout.getCustomerName(),
-                checkout.getEmail(),
-                checkout.getAddress(),
-                checkout.getAmount(),
-                checkout.getPaymentMethod(),
+                checkoutForm.getCustomerName(),
+                checkoutForm.getEmail(),
+                checkoutForm.getAddress(),
+                total,
+                checkoutForm.getPaymentMethod(),
                 "PENDING"
         );
+        order.setOrderDate(OffsetDateTime.now());
+        order.setUserId(userId);
 
+        Set<OrderItem> orderItems = new HashSet<>();
+        for (Map.Entry<Integer, Integer> entry : cart.getItems().entrySet()) {
+            int itemId = entry.getKey();
+            int quantity = entry.getValue();
+            Optional<ItemDTO> itemOpt = itemService.getById((long) itemId);
+            if (itemOpt.isPresent()) {
+                BigDecimal price = itemOpt.get().getPrice();
+                OrderItem orderItem = new OrderItem(order, itemId, quantity, price);
+                orderItems.add(orderItem);
+            }
+        }
+        order.setItems(orderItems);
         orderService.save(order);
+        cart.clear();
 
-        if ("PAYPAL".equals(checkout.getPaymentMethod())) {
+        if ("PAYPAL".equals(checkoutForm.getPaymentMethod())) {
             return "redirect:/paypal?orderId=" + order.getId();
         }
         return "checkout-success";
@@ -94,7 +125,7 @@ public class CartController {
         for (Map.Entry<Integer, Integer> entry : cartItems.entrySet()) {
             int itemId = entry.getKey();
             int quantity = entry.getValue();
-            Optional<ItemDTO> itemOpt = itemService.getById((long) itemId); // Use ItemDTO here
+            Optional<ItemDTO> itemOpt = itemService.getById((long) itemId);
             if (itemOpt.isPresent()) {
                 BigDecimal price = itemOpt.get().getPrice();
                 if (price != null) {

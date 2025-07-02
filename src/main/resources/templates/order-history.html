@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Order History</title>
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 60px auto;
+            background: #fff;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            padding: 38px 34px 28px 34px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 32px;
+        }
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 18px;
+            background: #fff;
+        }
+        .order-table th, .order-table td {
+            padding: 14px 12px;
+            text-align: left;
+        }
+        .order-table th {
+            background: #007bff;
+            color: #fff;
+            font-weight: 600;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .order-table tr:nth-child(even) {
+            background: #f2f6fc;
+        }
+        .order-table tr:hover {
+            background: #e2eafc;
+        }
+        .details-btn {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 20px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .details-btn:hover {
+            background: #0056b3;
+        }
+        .status {
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #fff;
+        }
+        .status.PENDING { background: #ffc107; color: #333; }
+        .status.COMPLETED { background: #28a745; }
+        .status.CANCELLED { background: #dc3545; }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container">
+    <h2>Your Order History</h2>
+    <table class="order-table">
+        <thead>
+        <tr>
+            <th>Order #</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th>Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.id}">1</td>
+            <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}">2025-07-02 20:09</td>
+            <td th:text="${order.amount} + ' €'">0.00 €</td>
+            <td>
+                <span th:text="${order.paymentStatus}" th:class="'status ' + ${order.paymentStatus}">PENDING</span>
+            </td>
+            <td th:text="${order.paymentMethod}">PAYPAL</td>
+            <td>
+                <a th:href="@{'/orders/details/' + ${order.id}}" class="details-btn">Show Details</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

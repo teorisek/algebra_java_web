@@ -1,6 +1,7 @@
 package hr.spring.web.trisek.service;
 
 import hr.spring.web.trisek.model.Order;
+import hr.spring.web.trisek.model.OrderItem;
 import hr.spring.web.trisek.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean delete(long id) {
         return orderRepository.delete((int) id);
+    }
+
+    @Override
+    public List<Order> findByUserId(Integer userId) {
+        return orderRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<OrderItem> findItemsByOrderId(Integer orderId) {
+        return orderRepository.findItemsByOrderId(orderId);
     }
 }
