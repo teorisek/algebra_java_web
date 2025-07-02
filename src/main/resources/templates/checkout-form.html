@@ -69,12 +69,13 @@
       background: #0056b3;
     }
   </style>
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AYMbHFRXjfOE0lfYexj1g6QEgR3gB7LW9PHSmmu0TcVf02a6eWr-fKttbCbgjf0hk-QUjxqNq3KFlqIP&currency=EUR"></script>
 </head>
 <body>
-<link rel="stylesheet" th:href="@{/css/navbar.css}">
 <div class="checkout-container">
   <h2>Checkout</h2>
-  <form th:action="@{/cart/checkout}" th:object="${checkoutForm}" method="post">
+  <form id="checkoutForm" th:action="@{/cart/checkout}" th:object="${checkoutForm}" method="post">
     <div class="form-group">
       <label for="customerName">Name:</label>
       <input type="text" th:field="*{customerName}" id="customerName" required />
@@ -98,8 +99,12 @@
         <option value="PAYPAL">Pay with PayPal</option>
       </select>
     </div>
-    <button class="submit-btn" type="submit">Place Order</button>
+    <div id="paypal-button-container" style="display:none; margin-top: 16px;"></div>
+    <button class="submit-btn" type="submit" id="placeOrderBtn">Place Order</button>
   </form>
 </div>
+
+<script src="/js/checkout.js"></script>
+
 </body>
 </html>

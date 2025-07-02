@@ -7,6 +7,7 @@ import hr.spring.web.trisek.model.OrderItem;
 import hr.spring.web.trisek.service.ItemService;
 import hr.spring.web.trisek.service.OrderService;
 import hr.spring.web.trisek.service.UserService;
+import hr.spring.web.trisek.service.PayPalService;
 import hr.spring.web.trisek.model.User;
 import hr.spring.web.trisek.dto.ItemDTO;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -29,6 +32,7 @@ public class CartController {
     private final ItemService itemService;
     private final OrderService orderService;
     private final UserService userService;
+    private final PayPalService payPalService;
 
     @PostMapping("/add")
     public String addToCart(@RequestParam int itemId, @RequestParam(defaultValue = "1") int quantity) {
@@ -76,7 +80,12 @@ public class CartController {
     }
 
     @PostMapping("/checkout")
-    public String processCheckout(@ModelAttribute CheckoutForm checkoutForm) {
+    public String processCheckout(
+            @ModelAttribute CheckoutForm checkoutForm,
+            @RequestParam(value = "paypalOrderId", required = false) String paypalOrderId,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws Exception {
         BigDecimal total = calculateCartTotal(cart.getItems());
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -88,13 +97,22 @@ public class CartController {
         }
         Integer userId = userOpt.get().getId();
 
+        String status = "PENDING";
+        if ("PAYPAL".equals(checkoutForm.getPaymentMethod())) {
+            if (!payPalService.verifyOrder(paypalOrderId)) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return null;
+            }
+            status = "PAID";
+        }
+
         Order order = new Order(
                 checkoutForm.getCustomerName(),
                 checkoutForm.getEmail(),
                 checkoutForm.getAddress(),
                 total,
                 checkoutForm.getPaymentMethod(),
-                "PENDING"
+                status
         );
         order.setOrderDate(OffsetDateTime.now());
         order.setUserId(userId);
@@ -111,12 +129,22 @@ public class CartController {
             }
         }
         order.setItems(orderItems);
+
         orderService.save(order);
         cart.clear();
 
         if ("PAYPAL".equals(checkoutForm.getPaymentMethod())) {
-            return "redirect:/paypal?orderId=" + order.getId();
+            if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                return null;
+            }
+            return "checkout-success";
         }
+        return "checkout-success";
+    }
+
+    @GetMapping("/checkout-success")
+    public String checkoutSuccess() {
         return "checkout-success";
     }
 
