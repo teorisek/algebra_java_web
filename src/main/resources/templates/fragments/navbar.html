@@ -16,6 +16,9 @@
     <div sec:authorize="hasRole('ROLE_ADMIN')">
         <a href="/admin/item">Items</a>
     </div>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <a href="/admin/logins">Logins</a>
+    </div>
     <span style="flex:1"></span>
     <div sec:authorize="isAuthenticated()">
         <span th:text="${#authentication.name}">Username</span>

@@ -1,5 +1,6 @@
 package hr.spring.web.trisek.config;
 
+import hr.spring.web.trisek.security.CustomLoginSuccessHandler;
 import hr.spring.web.trisek.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,9 +17,11 @@ public class SecurityConfig {
     public static final String ROLE_ADMIN = "ADMIN";
 
     private final CustomUserDetailsService userDetailsService;
+    private final CustomLoginSuccessHandler customLoginSuccessHandler;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService, CustomLoginSuccessHandler customLoginSuccessHandler, CustomLoginSuccessHandler customLoginSuccessHandler1) {
         this.userDetailsService = userDetailsService;
+        this.customLoginSuccessHandler = customLoginSuccessHandler1;
     }
 
     @Bean
@@ -37,6 +40,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/items", false)
+                        .successHandler(customLoginSuccessHandler)
                         .permitAll()
                 )
                 .logout(logout -> logout

@@ -51,6 +51,14 @@ CREATE TABLE order_item (
     CONSTRAINT fk_order_item_item FOREIGN KEY(item_id) REFERENCES item(id) ON DELETE SET NULL
 );
 
+CREATE TABLE login (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ip VARCHAR(45) NOT NULL
+);
+
+
 -- INSERT
 
 -- Categories

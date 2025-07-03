@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login History</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            background: #f8fafc;
+        }
+        .container {
+            margin-top: 70px;
+        }
+        .login-card {
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            border-radius: 12px;
+            background: #fff;
+            margin-bottom: 24px;
+            padding: 24px 32px;
+        }
+        .login-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2e3a59;
+        }
+        .login-label {
+            color: #888;
+            min-width: 70px;
+            display: inline-block;
+        }
+        .icon-user {
+            color: #0d6efd;
+            margin-right: 8px;
+        }
+        @media (max-width: 600px) {
+            .login-card { padding: 16px 8px; }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container py-4">
+    <h2 class="mb-4 text-center"><i class="bi bi-shield-lock-fill icon-user"></i>Login History</h2>
+    <div th:if="${#lists.isEmpty(logins)}" class="alert alert-info text-center">
+        <i class="bi bi-info-circle"></i> No login records found.
+    </div>
+    <div th:each="login : ${logins}" class="login-card">
+        <div class="login-header mb-2">
+            <i class="bi bi-person-check-fill icon-user"></i>
+            <span th:text="${login.username}">username</span>
+        </div>
+        <div><span class="login-label">Date:</span>
+            <span th:text="${#temporals.format(login.time, 'yyyy-MM-dd HH:mm')}"></span>
+        </div>
+        <div><span class="login-label">IP:</span>
+            <span th:text="${login.ip}"></span>
+        </div>
+        <div><span class="login-label">ID:</span>
+            <span th:text="${login.id}"></span>
+        </div>
+    </div>
+</div>
+</body>
+</html>
