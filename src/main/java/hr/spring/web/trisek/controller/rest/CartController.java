@@ -123,8 +123,16 @@ public class CartController {
             int quantity = entry.getValue();
             Optional<ItemDTO> itemOpt = itemService.getById((long) itemId);
             if (itemOpt.isPresent()) {
-                BigDecimal price = itemOpt.get().getPrice();
-                OrderItem orderItem = new OrderItem(order, itemId, quantity, price);
+                ItemDTO itemDto = itemOpt.get();
+                BigDecimal price = itemDto.getPrice();
+                OrderItem orderItem = new OrderItem(
+                        order,
+                        itemId,
+                        itemDto.getName(),
+                        itemDto.getDescription(),
+                        quantity,
+                        price
+                );
                 orderItems.add(orderItem);
             }
         }

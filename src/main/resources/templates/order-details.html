@@ -88,9 +88,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="item : ${itemDetails}">
-            <td th:text="${item.name}">Item Name</td>
-            <td th:text="${item.description}">Description</td>
+        <tr th:each="item : ${items}">
+            <td th:text="${item.itemName}">Item Name</td>
+            <td th:text="${item.itemDescription}">Description</td>
             <td th:text="${item.quantity}">1</td>
             <td th:text="${item.price} + ' €'">0.00 €</td>
         </tr>

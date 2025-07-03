@@ -20,8 +20,14 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @Column(name = "item_id", nullable = false)
+    @Column(name = "item_id")
     private Integer itemId;
+
+    @Column(name = "item_name")
+    private String itemName; // NEW
+
+    @Column(name = "item_description")
+    private String itemDescription; // NEW
 
     @Column(nullable = false)
     private Integer quantity;
@@ -29,9 +35,11 @@ public class OrderItem {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    public OrderItem(Order order, Integer itemId, Integer quantity, BigDecimal price) {
+    public OrderItem(Order order, Integer itemId, String itemName, String itemDescription, Integer quantity, BigDecimal price) {
         this.order = order;
         this.itemId = itemId;
+        this.itemName = itemName;
+        this.itemDescription = itemDescription;
         this.quantity = quantity;
         this.price = price;
     }

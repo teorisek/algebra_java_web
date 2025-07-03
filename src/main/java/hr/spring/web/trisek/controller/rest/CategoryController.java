@@ -22,16 +22,9 @@ public class CategoryController {
     return categoryService.getAll();
     }
 
-    @PostMapping("/")
-    public CategoryDTO save(@RequestBody CategoryDTO category) {
-    return categoryService.save(category);
-    }
-
     @GetMapping("/{id}")
     public Optional<CategoryDTO> getById(@PathVariable int id) {
         return categoryService.getById(id);
     }
 
-    @DeleteMapping("/")
-    public boolean delete(@RequestBody long id) { return categoryService.delete(id);}
 }

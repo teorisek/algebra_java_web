@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Category</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .card {
+            max-width: 500px;
+            margin: 3rem auto;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .form-label {
+            font-weight: 500;
+        }
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-primary text-white text-center">
+            <h3>Edit Category</h3>
+        </div>
+        <div class="card-body">
+            <form th:action="@{|/admin/category/edit/${category.id}|}" th:object="${category}" method="post" autocomplete="off">
+                <input type="hidden" th:field="*{id}"/>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" th:field="*{name}" id="name" class="form-control" required autofocus>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea th:field="*{description}" id="description" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="btn-group justify-content-between">
+                    <button type="submit" class="btn btn-success w-50">
+                        <i class="bi bi-check-circle"></i> Save
+                    </button>
+                    <a th:href="@{/admin/category}" class="btn btn-secondary w-50">
+                        <i class="bi bi-arrow-left"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</body>
+</html>

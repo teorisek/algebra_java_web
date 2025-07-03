@@ -1,5 +1,6 @@
 package hr.spring.web.trisek.service;
 
+import hr.spring.web.trisek.model.Role;
 import hr.spring.web.trisek.model.User;
 import hr.spring.web.trisek.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            if (!user.getPassword().startsWith("$2a$")) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+        } else if (user.getId() != null) {
+            user.setPassword(userRepository.getById(user.getId()).map(User::getPassword).orElse(null));
+        }
         return userRepository.save(user);
     }
 
@@ -41,4 +48,10 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    @Override
+    public List<Role> getAllRoles() {
+        return userRepository.getAllRoles();
+    }
+
 }

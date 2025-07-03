@@ -41,20 +41,8 @@ public class OrderHistoryController {
 
         List<OrderItem> items = orderService.findItemsByOrderId(orderId);
 
-        List<Map<String, Object>> itemDetails = new ArrayList<>();
-        for (OrderItem item : items) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("quantity", item.getQuantity());
-            map.put("price", item.getPrice());
-            itemService.getById(item.getItemId().longValue()).ifPresent(dto -> {
-                map.put("name", dto.getName());
-                map.put("description", dto.getDescription());
-            });
-            itemDetails.add(map);
-        }
-
         model.addAttribute("order", order);
-        model.addAttribute("itemDetails", itemDetails);
+        model.addAttribute("items", items);
         return "order-details";
     }
 }

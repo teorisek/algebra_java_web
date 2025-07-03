@@ -48,8 +48,13 @@ public class OrderRepositoryJdbc implements OrderRepository {
         if (order.getItems() != null) {
             for (OrderItem item : order.getItems()) {
                 jdbcTemplate.update(
-                        "INSERT INTO order_item (order_id, item_id, quantity, price) VALUES (?, ?, ?, ?)",
-                        order.getId(), item.getItemId(), item.getQuantity(), item.getPrice()
+                        "INSERT INTO order_item (order_id, item_id, quantity, price, item_name, item_description) VALUES (?, ?, ?, ?, ?, ?)",
+                        order.getId(),
+                        item.getItemId(),
+                        item.getQuantity(),
+                        item.getPrice(),
+                        item.getItemName(),
+                        item.getItemDescription()
                 );
             }
         }
@@ -102,9 +107,11 @@ public class OrderRepositoryJdbc implements OrderRepository {
                 (rs, rowNum) -> {
                     OrderItem item = new OrderItem();
                     item.setId(rs.getInt("id"));
-                    item.setItemId(rs.getInt("item_id"));
+                    item.setItemId(rs.getObject("item_id") != null ? rs.getInt("item_id") : null);
                     item.setQuantity(rs.getInt("quantity"));
                     item.setPrice(rs.getBigDecimal("price"));
+                    item.setItemName(rs.getString("item_name"));
+                    item.setItemDescription(rs.getString("item_description"));
                     return item;
                 },
                 orderId

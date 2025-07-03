@@ -1,6 +1,7 @@
 package hr.spring.web.trisek.repository;
 
 import hr.spring.web.trisek.model.User;
+import hr.spring.web.trisek.model.Role;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,4 +12,5 @@ public interface UserRepository {
     boolean delete(Integer id);
     Optional<User> getById(Integer id);
     Optional<User> findByUsername(String username);
+    List<Role> getAllRoles();
 }

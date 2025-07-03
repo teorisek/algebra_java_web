@@ -3,6 +3,7 @@ package hr.spring.web.trisek.config;
 import hr.spring.web.trisek.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,6 +31,7 @@ public class SecurityConfig {
                         .requestMatchers("/orders/history").hasAnyRole(ROLE_USER,ROLE_ADMIN)
                         .requestMatchers("/items", "/cart/**").permitAll()
                         .requestMatchers("/admin/**").hasRole(ROLE_ADMIN)
+                        .requestMatchers("/category/**").hasRole(ROLE_ADMIN)
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
