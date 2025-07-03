@@ -26,8 +26,8 @@ public class ItemRepositoryJdbc implements ItemRepository {
         this.jdbcTemplate = jdbcTemplate;
         this.categoryRepository = categoryRepository;
         this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("ITEM")
-                .usingGeneratedKeyColumns("ID");
+                .withTableName("item")
+                .usingGeneratedKeyColumns("id");
     }
 
     @Override
@@ -37,13 +37,30 @@ public class ItemRepositoryJdbc implements ItemRepository {
 
     @Override
     public Item save(Item item) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("NAME", item.getName());
-        params.put("DESCRIPTION", item.getDescription());
-        Number generatedPrimaryKey = simpleJdbcInsert.executeAndReturnKey(params);
-        item.setId(generatedPrimaryKey.intValue());
+        if (item.getId() == null) {
+            Map<String, Object> params = new HashMap<>();
+            params.put("name", item.getName());
+            params.put("description", item.getDescription());
+            params.put("quantity", item.getQuantity());
+            params.put("price", item.getPrice());
+            params.put("category_id", item.getCategory() != null ? item.getCategory().getId() : null);
+
+            Number generatedPrimaryKey = simpleJdbcInsert.executeAndReturnKey(params);
+            item.setId(generatedPrimaryKey.intValue());
+        } else {
+            jdbcTemplate.update(
+                    "UPDATE item SET name = ?, description = ?, quantity = ?, price = ?, category_id = ? WHERE id = ?",
+                    item.getName(),
+                    item.getDescription(),
+                    item.getQuantity(),
+                    item.getPrice(),
+                    item.getCategory() != null ? item.getCategory().getId() : null,
+                    item.getId()
+            );
+        }
         return item;
     }
+
 
     @Override
     public boolean delete(Integer id) {

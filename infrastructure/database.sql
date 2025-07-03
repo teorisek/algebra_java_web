@@ -1,5 +1,3 @@
--- CREATE
-
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
@@ -12,9 +10,8 @@ CREATE TABLE item (
     description VARCHAR(100),
     quantity INT,
     price NUMERIC(10,2) NOT NULL,
-    category_id INT REFERENCES category(id)
+    category_id INT REFERENCES category(id) ON DELETE CASCADE
 );
-
 
 CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
@@ -39,30 +36,19 @@ CREATE TABLE orders (
     payment_status VARCHAR(20) NOT NULL,
     order_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     user_id INTEGER NOT NULL,
-    CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES users(id)
+    CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE order_item (
     id SERIAL PRIMARY KEY,
     order_id INT NOT NULL,
-    item_id INT NOT NULL,
+    item_id INT,
     quantity INT NOT NULL,
     price NUMERIC(10,2) NOT NULL,
-    CONSTRAINT fk_order
-      FOREIGN KEY(order_id) 
-      REFERENCES orders(id)
-      ON DELETE CASCADE
-);
-
-
-CREATE TABLE checkout (
-    id SERIAL PRIMARY KEY,
-    customer_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    address VARCHAR(255) NOT NULL,
-    amount NUMERIC(10,2) NOT NULL,
-    payment_method VARCHAR(20) NOT NULL,
-    payment_status VARCHAR(20) NOT NULL
+    item_name VARCHAR(255),
+    item_description VARCHAR(255),
+    CONSTRAINT fk_order FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    CONSTRAINT fk_order_item_item FOREIGN KEY(item_id) REFERENCES item(id) ON DELETE SET NULL
 );
 
 -- INSERT
@@ -95,4 +81,3 @@ INSERT INTO roles (name) VALUES ('user'), ('admin');
 INSERT INTO users (username, password, enabled, role_id) VALUES
 ('user',  '$2a$10$5t7K5Q3w8b1R2v9yZ6t8OeWH3VpM1xtN.B7Ob2JlYY.DTH9xirVOy', true, 1),
 ('admin', '$2a$10$Qb8P6e1Z4v2R3y7T5w0L8eBZsEhzRTqvOq7rbdl/Bf0GtsHLMw0Vm', true, 2);
-
