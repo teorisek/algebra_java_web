@@ -8,7 +8,7 @@
         <a href="/admin/users">User Management</a>
     </div>
     <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <a href="/orders/history">Order History</a>
+        <a href="/admin/all-orders">Order History</a>
     </div>
     <div sec:authorize="hasRole('ROLE_ADMIN')">
         <a href="/admin/category">Categories</a>

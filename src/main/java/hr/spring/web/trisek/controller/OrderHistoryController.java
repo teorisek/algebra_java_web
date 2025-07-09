@@ -20,7 +20,6 @@ public class OrderHistoryController {
 
     private final OrderService orderService;
     private final UserService userService;
-    private final ItemService itemService;
 
     @GetMapping("/history")
     public String orderHistory(Model model) {
