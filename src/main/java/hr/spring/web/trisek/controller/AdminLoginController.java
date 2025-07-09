@@ -1,4 +1,4 @@
-package hr.spring.web.trisek.controller.rest;
+package hr.spring.web.trisek.controller;
 
 import hr.spring.web.trisek.model.Login;
 import hr.spring.web.trisek.repository.LoginRepository;

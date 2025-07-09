@@ -1,14 +1,10 @@
-package hr.spring.web.trisek.controller.rest;
+package hr.spring.web.trisek.controller;
 
 
-import hr.spring.web.trisek.dto.ItemDTO;
 import hr.spring.web.trisek.service.ItemService;
 import hr.spring.web.trisek.service.CategoryService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
 
 @Controller
 public class FrontendController {

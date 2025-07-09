@@ -1,4 +1,4 @@
-package hr.spring.web.trisek.controller.rest;
+package hr.spring.web.trisek.controller;
 
 import hr.spring.web.trisek.model.User;
 import hr.spring.web.trisek.service.UserService;
