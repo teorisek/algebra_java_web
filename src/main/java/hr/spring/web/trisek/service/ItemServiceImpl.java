@@ -70,4 +70,12 @@ public class ItemServiceImpl implements ItemService {
                 category
         );
     }
+
+    public List<ItemDTO> getAllFiltered(String name, String category) {
+        List<ItemDTO> allItems = getAll();
+        return allItems.stream()
+                .filter(item -> name == null || name.isEmpty() || item.getName().toLowerCase().contains(name.toLowerCase()))
+                .filter(item -> category == null || category.isEmpty() || item.getCategoryName().equals(category))
+                .toList();
+    }
 }

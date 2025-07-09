@@ -10,4 +10,5 @@ public interface ItemService {
     ItemDTO save(ItemDTO itemDTO);
     Optional<ItemDTO> getById(long id);
     boolean delete(long id);
+     List<ItemDTO> getAllFiltered(String name, String category);
 }

@@ -18,8 +18,11 @@ public class ItemController {
     }
 
     @GetMapping("/")
-    public List<ItemDTO> getAll() {
-    return itemService.getAll();
+    public List<ItemDTO> getAll(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String category
+    ) {
+        return itemService.getAllFiltered(name, category);
     }
 
     @PostMapping("/")

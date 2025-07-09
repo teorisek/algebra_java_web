@@ -21,13 +21,13 @@ public class FrontendController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/items")
-    public String items(Model model) {
-        List<ItemDTO> items = itemService.getAll();
-        model.addAttribute("items", items);
-        model.addAttribute("categories", categoryService.getAll());
-        return "items";
-    }
+//    @GetMapping("/items")
+//    public String items(Model model) {
+//        List<ItemDTO> items = itemService.getAll();
+//        model.addAttribute("items", items);
+//        model.addAttribute("categories", categoryService.getAll());
+//        return "items";
+//    }
 
     @GetMapping("/login")
     public String login() {
